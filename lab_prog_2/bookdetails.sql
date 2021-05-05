@@ -1,0 +1,46 @@
+use mallika;
+show tables;
+create table AUTHOR(authorid int, name varchar(30), city varchar(30), country varchar(30), primary key(authorid));
+create table PUBLISHER(publisherid int,name varchar(30),city varchar(30), country varchar(30), primary key(publisherid));
+create table CATALOG(bookid int,title varchar(30), authorid int,publisherid int ,categoryid int, year int, price int, primary key(bookid), foreign key(publisherid) references PUBLISHER(publisherid), foreign key(categoryid) references CATEGORY(categoryid));
+create table CATEGORY(categoryid int,description varchar(30), primary key(categoryid));
+create table ORDERDETAILS(orderno int,bookid int,quantity int, primary key(orderno), foreign key(bookid) references CATALOG(bookid));
+
+insert into AUTHOR values(1001,'teras chan','ca','usa');
+insert into AUTHOR values(1002,'stevens','zombi','uganda');
+insert into AUTHOR values(1003,'m mano','cair','canada');
+insert into AUTHOR values(1004,'karthik','new york','usa');
+insert into AUTHOR values(1005,'williams stallings','las vegas','usa');
+insert into PUBLISHER values(1,'pearson','new york','usa');
+insert into PUBLISHER values(2,'eee','new south vales','usa');
+insert into PUBLISHER values(3,'phi','delhi','india');
+insert into PUBLISHER values(4,'willey','berlin','germany');
+insert into PUBLISHER values(5,'mgh','new york','usa');
+insert into CATALOG values(11,'unix system prg',1001,1,1001,2000,251);
+insert into CATALOG values(12,'digital signals',1002,2,1003,2001,425);
+insert into CATALOG values(13,'logic design',1003,3,1002,1999,225);
+insert into CATALOG values(14,'server prg',1004,4,1004,2001,333);
+insert into CATALOG values(15,'linux os',1005,5,1005,2003,326);
+insert into CATALOG values(16,'c++ bible',1005,5,1001,2000,526);
+insert into CATALOG values(17,'cobol handbook',1005,4,1001,2000,628);
+insert into CATEGORY values(1001,'computer science');
+insert into CATEGORY values(1002,'algorithm design');
+insert into CATEGORY values(1003,'electronics');
+insert into CATEGORY values(1004,'programming');
+insert into CATEGORY values(1005,'operating systems');
+insert into ORDERDETAILS values(1,11,5);
+insert into ORDERDETAILS values(2,12,8);
+insert into ORDERDETAILS values(3,13,15);
+insert into ORDERDETAILS values(4,14,22);
+insert into ORDERDETAILS values(5,15,3); 
+
+select * from AUTHOR;
+select * from PUBLISHER;
+select * from CATEGORY;
+select * from CATALOG;
+select * from ORDERDETAILS;
+
+select a.authorid,a.name,a.city,a.country,c.price from AUTHOR a,CATALOG c where a.authorid=c.authorid AND c.year>2000 group by c.authorid HAVING count(c.authorid)>=2;
+select a.name from AUTHOR a, CATALOG c, ORDERDETAILS o where a.authorid=c.authorid and c.bookid=o.bookid and o.quantity=(select max(quantity) from ORDERDETAILS);
+update CATALOG c set c.price=1.1*price where c.publisherid=(select publisherid from PUBLISHER where name='willey');
+select p.name, c.price from PUBLISHER p, CATALOG c where p.publisherid=c.publisherid and p.name='willey';
