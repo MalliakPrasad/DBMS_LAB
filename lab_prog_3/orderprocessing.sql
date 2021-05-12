@@ -5,10 +5,7 @@ create table ITEM(itemno int,unitprice int, primary key(itemno));
 create table ORDERITEM(orderno int,itemno int, qty int, foreign key(orderno) references ORDERS(orderno) ON DELETE SET NULL ON UPDATE CASCADE, foreign key(itemno) references ITEM(itemno) ON DELETE SET NULL ON UPDATE CASCADE);
 create table WAREHOUSE(warehouseno int,city varchar(30), primary key(warehouseno));
 create table SHIPMENT(orderno int,warehouseno int,shipdate date, foreign key(orderno) references ORDERS(orderno), foreign key(warehouseno) references WAREHOUSE(warehouseno));
-desc CUSTOMER;
-alter table ORDERS add primary key(orderno);
-alter table ORDERS add foreign key(custno) references CUSTOMER(custno);
-desc ORDERS;
+
 
 INSERT INTO CUSTOMER VALUES(771,'PUSHPA K','BANGALORE');
 INSERT INTO CUSTOMER VALUES(772,'SUMAN','MUMBAI');
@@ -71,6 +68,3 @@ select s.orderno from SHIPMENT s, WAREHOUSE w where s.warehouseno=w.warehouseno 
 delete from ITEM i where i.itemno=5001;
 select * from ITEM;
 
-alter table ORDERITEM drop foreign key orderitem_ibfk_1;
-alter table ORDERITEM add foreign key(orderno) references ORDERS(orderno) ON DELETE SET NULL ON UPDATE CASCADE;
-alter table ORDERITEM add foreign key(itemno) references ITEM(itemno) ON DELETE SET NULL ON UPDATE CASCADE;
